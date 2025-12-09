@@ -1,0 +1,17 @@
+<odoo>
+    <data noupdate="1">
+        <record id="demo_employee_budi" model="hr.employee">
+            <field name="name">Budi Santoso (Demo)</field>
+            <field name="work_email">budi.demo@kaifait.com</field>
+            <field name="gender">male</field>
+        </record>
+
+        <record id="demo_contract_budi" model="hr.contract">
+            <field name="name">Contract Budi 2025</field>
+            <field name="employee_id" ref="demo_employee_budi"/>
+            <field name="job_id" ref="hr.job_developer"/> <field name="wage">10000000</field> <field name="l10n_id_ptkp">TK/0</field> <field name="structure_type_id" ref="hr_contract.structure_type_employee"/>
+            <field name="state">open</field>
+            <field name="date_start" eval="time.strftime('%Y-01-01')"/>
+        </record>
+    </data>
+</odoo>

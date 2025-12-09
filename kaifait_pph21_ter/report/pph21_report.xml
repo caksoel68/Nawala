@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_1721_a1" model="ir.actions.report">
+        <field name="name">Bukti Potong 1721-A1</field>
+        <field name="model">pph21.a1.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">kaifait_pph21_ter.report_1721_a1_template</field>
+        <field name="report_file">kaifait_pph21_ter.report_1721_a1_template</field>
+        <field name="print_report_name">'Bukti_Potong_1721_A1_%s' % object.year</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

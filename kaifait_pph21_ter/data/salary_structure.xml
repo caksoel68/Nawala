@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="DED_PPH" model="hr.salary.rule.category">
+            <field name="name">Pajak Penghasilan</field>
+            <field name="code">DED_PPH</field>
+        </record>
+
+        <record id="hr_salary_rule_pph21_ter" model="hr.salary.rule">
+            <field name="name">PPh 21 (TER/Final)</field>
+            <field name="sequence" eval="200"/>
+            <field name="code">PPH21</field>
+            <field name="category_id" ref="DED_PPH"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            
+            <field name="amount_python_compute"><![CDATA[
+# --- HELPER ---
+def get_ter_category(ptkp):
+    if ptkp in ['TK/0', 'TK/1', 'K/0']: return 'A'
+    if ptkp in ['TK/2', 'TK/3', 'K/1', 'K/2']: return 'B'
+    return 'C'
+
+# --- VARS ---
+gross_curr = categories.GROSS
+ptkp_code = contract.l10n_id_ptkp
+month = payslip.date_to.month
+year = payslip.date_to.year
+result = 0
+
+# --- A. METODE TER (JAN-NOV) ---
+if month < 12:
+    ter_cat = get_ter_category(ptkp_code)
+    # Cari Tarif TER
+    ter_rec = payslip.env['kaifa.pph.ter'].search([
+        ('category', '=', ter_cat),
+        ('min_income', '<=', gross_curr),
+        ('max_income', '>=', gross_curr)
+    ], limit=1)
+    
+    rate = ter_rec.rate if ter_rec else 0.0
+    result = gross_curr * (rate / 100.0)
+
+# --- B. METODE TAHUNAN (DESEMBER / RESIGN) ---
+else:
+    # 1. Hitung Gross & Pajak Setahun (Jan-Nov)
+    start_date = '%s-01-01' % year
+    end_date = '%s-12-01' % year
+    
+    prev_slips = payslip.env['hr.payslip'].search([
+        ('employee_id', '=', payslip.employee_id.id),
+        ('state', '=', 'done'),
+        ('date_to', '>=', start_date),
+        ('date_to', '<', end_date)
+    ])
+    
+    # Ambil total GROSS dan PPH21 dari payslip line yang sudah done
+    gross_accumulated = sum(prev_slips.mapped('line_ids').filtered(lambda l: l.code == 'GROSS').mapped('total'))
+    tax_paid_accumulated = sum(prev_slips.mapped('line_ids').filtered(lambda l: l.code == 'PPH21').mapped('total'))
+
+    gross_annual = gross_accumulated + gross_curr
+    
+    # 2. Biaya Jabatan (5%, Max 6 Juta setahun)
+    biaya_jabatan = min(gross_annual * 0.05, 6000000)
+    
+    # 3. PKP (Penghasilan Kena Pajak)
+    # Mapping PTKP Sederhana (Harusnya dinamis dari helper)
+    ptkp_map = {
+        'TK/0': 54000000, 'TK/1': 58500000, 'TK/2': 63000000, 'TK/3': 67500000,
+        'K/0': 58500000, 'K/1': 63000000, 'K/2': 67500000, 'K/3': 72000000
+    }
+    ptkp_val = ptkp_map.get(ptkp_code, 54000000)
+    
+    netto_annual = gross_annual - biaya_jabatan
+    pkp = max(0, netto_annual - ptkp_val)
+    pkp = (pkp // 1000) * 1000 # Pembulatan ribuan ke bawah
+    
+    # 4. Hitung PPh Terutang Setahun (Tarif Progresif UU HPP)
+    tax_annual = 0
+    rem_pkp = pkp
+    
+    brackets = [
+        (60000000, 0.05),
+        (190000000, 0.15),
+        (250000000, 0.25),
+        (4500000000, 0.30),
+        (float('inf'), 0.35)
+    ]
+    
+    for limit, rate_tier in brackets:
+        if rem_pkp > 0:
+            tier_amt = min(rem_pkp, limit)
+            tax_annual += tier_amt * rate_tier
+            rem_pkp -= tier_amt
+
+    # 5. PPh Masa Terakhir
+    result = tax_annual - tax_paid_accumulated
+    result = max(0, result) # Cegah minus
+            ]]></field>
+        </record>
+
+        <record id="structure_indonesia_ter" model="hr.payroll.structure">
+            <field name="name">Gaji Bulanan Indonesia (TER + Accounting)</field>
+            <field name="code">IDTER_ACC</field>
+            <field name="parent_id" eval="False"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="rule_ids" eval="[(4, ref('hr_salary_rule_pph21_ter'))]"/>
+        </record>
+
+    </data>
+</odoo>

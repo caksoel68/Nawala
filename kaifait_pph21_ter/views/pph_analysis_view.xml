@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_line_filter_pph" model="ir.ui.view">
+        <field name="name">hr.payslip.line.filter.pph</field>
+        <field name="model">hr.payslip.line</field>
+        <field name="inherit_id" ref="om_hr_payroll.view_hr_payslip_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="PPh 21 Lines Only" name="pph_only" domain="[('code', '=', 'PPH21')]"/>
+                <filter string="Done Payslips" name="filter_done" domain="[('state', '=', 'done')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_payslip_line_pivot_pph" model="ir.ui.view">
+        <field name="name">hr.payslip.line.pivot.pph</field>
+        <field name="model">hr.payslip.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Analisa PPh 21" sample="1">
+                <field name="date_to" type="row" interval="month"/>
+                <field name="employee_id" type="row"/>
+                <field name="total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_pph_21_analysis" model="ir.actions.act_window">
+        <field name="name">Analisa PPh 21</field>
+        <field name="res_model">hr.payslip.line</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[('code', '=', 'PPH21')]</field>
+        <field name="context">{'search_default_pph_only': 1, 'search_default_filter_done': 1, 'pivot_measures': ['total']}</field>
+    </record>
+
+    <menuitem id="menu_pph_21_analysis"
+              name="Analisa PPh 21"
+              parent="om_hr_payroll.menu_hr_payroll_root"
+              action="action_pph_21_analysis"
+              sequence="99"/>
+</odoo>

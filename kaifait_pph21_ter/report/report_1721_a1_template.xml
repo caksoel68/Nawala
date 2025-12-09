@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_1721_a1_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-foreach="o.employee_ids" t-as="emp">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-set="data" t-value="o.get_a1_data(emp.id, o.year)"/>
+                        
+                        <div class="text-center mb-4">
+                            <h3>BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21 (FORMULIR 1721-A1)</h3>
+                            <strong>NOMOR: 1.1-12.<span t-esc="o.year"/>.00001</strong> <span class="text-muted">(Contoh)</span>
+                        </div>
+
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <th colspan="2" class="bg-light">A. IDENTITAS PENERIMA PENGHASILAN</th>
+                            </tr>
+                            <tr>
+                                <td width="30%">NPWP</td>
+                                <td><span t-field="emp.identification_id"/></td>
+                            </tr>
+                            <tr>
+                                <td>Nama</td>
+                                <td><span t-field="emp.name"/></td>
+                            </tr>
+                            <tr>
+                                <td>Alamat</td>
+                                <td><span t-field="emp.private_street"/></td>
+                            </tr>
+                             <tr>
+                                <td>PTKP</td>
+                                <td><span t-esc="data['ptkp_code']"/></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" class="bg-light">B. RINCIAN PENGHASILAN DAN PENGHITUNGAN PPH</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>Jumlah Penghasilan Bruto (Gaji, Tunjangan, dll)</td>
+                                    <td class="text-end"><span t-esc="data['gross']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>Pengurangan: Biaya Jabatan</td>
+                                    <td class="text-end"><span t-esc="data['biaya_jabatan']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td>3.</td>
+                                    <td>Jumlah Penghasilan Netto (1 - 2)</td>
+                                    <td class="text-end"><span t-esc="data['netto']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                <tr>
+                                    <td>4.</td>
+                                    <td>Penghasilan Tidak Kena Pajak (PTKP)</td>
+                                    <td class="text-end"><span t-esc="data['ptkp_amount']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td>5.</td>
+                                    <td>Penghasilan Kena Pajak (PKP)</td>
+                                    <td class="text-end"><span t-esc="data['pkp']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                <tr class="fw-bold border-top border-dark">
+                                    <td>6.</td>
+                                    <td>PPh Pasal 21 Terutang</td>
+                                    <td class="text-end"><span t-esc="data['pph_terutang']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                <tr>
+                                    <td>7.</td>
+                                    <td>PPh Pasal 21 yang Telah Dipotong dan Dilunasi</td>
+                                    <td class="text-end"><span t-esc="data['pph_terutang']" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                </tr>
+                                 <tr>
+                                    <td>8.</td>
+                                    <td>PPh Pasal 21 Kurang/Lebih Bayar (6 - 7)</td>
+                                    <td class="text-end">0.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row mt-5">
+                            <div class="col-8"></div>
+                            <div class="col-4 text-center">
+                                <p><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></p>
+                                <br/><br/><br/>
+                                <p><strong>( Pejabat Penandatangan )</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

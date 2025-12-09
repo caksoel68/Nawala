@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pph21_a1_wizard_form" model="ir.ui.view">
+        <field name="name">pph21.a1.wizard.form</field>
+        <field name="model">pph21.a1.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cetak Bukti Potong 1721-A1">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        Wizard ini akan mencetak Formulir 1721-A1 dalam format PDF berdasarkan data gaji setahun (Jan-Des).
+                    </div>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print" string="Cetak PDF" type="object" class="btn-primary"/>
+                    <button string="Batal" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pph21_a1_wizard" model="ir.actions.act_window">
+        <field name="name">Cetak 1721-A1</field>
+        <field name="res_model">pph21.a1.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_pph21_a1_wizard"
+              name="Bukti Potong 1721-A1"
+              parent="om_hr_payroll.menu_hr_payroll_root"
+              action="action_pph21_a1_wizard"
+              sequence="30"/>
+</odoo>

@@ -1,0 +1,53 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* kaifait_pph21_ter
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-09 00:00+0000\n"
+"PO-Revision-Date: 2025-12-09 00:00+0000\n"
+"Last-Translator: Syamsul Maarif AB <contact@kaifait.com>\n"
+"Language-Team: Indonesian <id@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: id\n"
+
+#. module: kaifait_pph21_ter
+#: model:ir.model.fields,field_description:kaifait_pph21_ter.field_hr_contract__l10n_id_ptkp
+msgid "Status PTKP (PPh 21)"
+msgstr "Status PTKP (PPh 21)"
+
+#. module: kaifait_pph21_ter
+#: model:ir.model.fields,help:kaifait_pph21_ter.field_hr_contract__l10n_id_ptkp
+msgid "Digunakan untuk menentukan Kategori TER (A, B, atau C) dan perhitungan masa pajak terakhir."
+msgstr "Used to determine TER Category (A, B, or C) and final tax period calculation."
+
+#. module: kaifait_pph21_ter
+#: model:ir.model.fields,field_description:kaifait_pph21_ter.field_kaifa_pph_ter__category
+msgid "Kategori TER"
+msgstr "TER Category"
+
+#. module: kaifait_pph21_ter
+#: model:ir.model.fields,field_description:kaifait_pph21_ter.field_kaifa_pph_ter__min_income
+msgid "Penghasilan Min"
+msgstr "Min Income"
+
+#. module: kaifait_pph21_ter
+#: model:ir.model.fields,field_description:kaifait_pph21_ter.field_kaifa_pph_ter__max_income
+msgid "Penghasilan Max"
+msgstr "Max Income"
+
+#. module: kaifait_pph21_ter
+#: model:ir.model.fields,field_description:kaifait_pph21_ter.field_kaifa_pph_ter__rate
+msgid "Tarif (%)"
+msgstr "Rate (%)"
+
+#. module: kaifait_pph21_ter
+#: model:ir.actions.act_window,name:kaifait_pph21_ter.action_kaifa_pph_ter
+#: model:ir.ui.menu,name:kaifait_pph21_ter.menu_kaifa_pph_ter
+msgid "Tarif PPh 21 TER"
+msgstr "PPh 21 TER Rates"

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kaifa_pph_ter,kaifa.pph.ter,model_kaifa_pph_ter,base.group_user,1,0,0,0
+access_kaifa_pph_ter_manager,kaifa.pph.ter manager,model_kaifa_pph_ter,hr.group_hr_manager,1,1,1,1
