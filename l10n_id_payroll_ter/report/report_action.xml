@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_payslip_id" model="ir.actions.report">
+        <field name="name">Slip Gaji (Indonesia)</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_id_payroll_ter.report_payslip_id</field>
+        <field name="report_file">l10n_id_payroll_ter.report_payslip_id</field>
+        <field name="print_report_name">'Slip_Gaji_%s' % (object.employee_id.name)</field>
+        
+        <field name="binding_model_id" search="[('model', '=', 'hr.payslip')]"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
