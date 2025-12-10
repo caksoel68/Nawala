@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_payslip_id">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">SLIP GAJI KARYAWAN</h2>
+                    <p class="text-center"><span t-field="o.date_from"/> s/d <span t-field="o.date_to"/></p>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td width="20%"><strong>Nama Karyawan</strong></td>
+                            <td width="30%"><span t-field="o.employee_id"/></td>
+                            <td width="20%"><strong>Jabatan</strong></td>
+                            <td width="30%"><span t-field="o.employee_id.job_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>NIK / KTP</strong></td>
+                            <td><span t-field="o.employee_id.identification_id"/></td>
+                            <td><strong>Bank</strong></td>
+                            <td><span t-field="o.employee_id.bank_account_id.bank_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status PTKP</strong></td>
+                            <td><span t-field="o.contract_id.l10n_id_ptkp_code"/></td>
+                            <td><strong>No. Rekening</strong></td>
+                            <td><span t-field="o.employee_id.bank_account_id.acc_number"/></td>
+                        </tr>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th>PENDAPATAN</th>
+                                        <th class="text-end">JUMLAH (IDR)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.line_ids.filtered(lambda line: line.category_id.code in ('BASIC', 'ALW', 'GROSS'))" t-as="line">
+                                        <td><span t-field="line.name"/></td>
+                                        <td class="text-end">
+                                            <span t-esc="line.total" 
+                                                  t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-6">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th>POTONGAN</th>
+                                        <th class="text-end">JUMLAH (IDR)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.line_ids.filtered(lambda line: line.category_id.code == 'DED')" t-as="line">
+                                        <td><span t-field="line.name"/></td>
+                                        <td class="text-end text-danger">
+                                            <span t-esc="line.total" 
+                                                  t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <table class="table table-bordered">
+                                <tr class="bg-dark text-white">
+                                    <td class="text-end" width="80%"><strong>TOTAL GAJI BERSIH (TAKE HOME PAY)</strong></td>
+                                    <td class="text-end">
+                                        <strong t-foreach="o.line_ids.filtered(lambda line: line.code == 'NET')" t-as="line">
+                                            <span t-esc="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5" style="page-break-inside: avoid;">
+                        <div class="col-6 text-center">
+                            <p>Diterima Oleh,</p>
+                            <br/><br/><br/>
+                            <p>( <span t-field="o.employee_id"/> )</p>
+                        </div>
+                        <div class="col-6 text-center">
+                            <p>Disetujui Oleh,</p>
+                            <br/><br/><br/>
+                            <p>( HR Manager / Finance )</p>
+                        </div>
+                    </div>
+
+                    <div class="text-muted small mt-4">
+                        * Slip gaji ini digenerate otomatis oleh sistem.
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

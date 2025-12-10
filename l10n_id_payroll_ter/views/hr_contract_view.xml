@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_contract_view_form_l10n_id" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.l10n.id</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='information']" position="inside">
+                <group string="Payroll Indonesia (Pajak &amp; BPJS)" name="l10n_id_payroll">
+                    <group>
+                        <field name="l10n_id_ptkp_code"/>
+                        <field name="l10n_id_ter_category" readonly="1" force_save="1"/>
+                    </group>
+                    <group>
+                        <field name="use_bpjs_kesehatan"/>
+                        <field name="use_bpjs_ketenagakerjaan"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
